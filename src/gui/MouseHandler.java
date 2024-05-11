@@ -52,4 +52,12 @@ public class MouseHandler implements MouseMotionListener {
     public double getAngleY() {
         return angleY;
     }
+
+    public void setAngleX(double newAngle) {
+        angleX = newAngle;
+    }
+
+    public void setAngleY(double newAngle) {
+        angleY = newAngle;
+    }
 }

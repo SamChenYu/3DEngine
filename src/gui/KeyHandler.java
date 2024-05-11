@@ -67,27 +67,15 @@ public class KeyHandler implements KeyListener {
 
 
         if (leftPressed) {
-            if(angleX > 0) {
-                angleX *= 1.0;
-            }
-            angleX += sensitivty;
+            angleX -= sensitivty;
         } else if (rightPressed) {
-            if(angleX < 0) {
-                angleX *= 1.0;
-            }
             angleX += sensitivty;
         }
 
         if (upPressed) {
-            if(angleY > 0) {
-                angleY *= 1.0;
-            }
             angleY += sensitivty;
         } else if (downPressed) {
-            if(angleY < 0) {
-                angleY *= 1.0;
-            }
-            angleY += sensitivty;
+            angleY -= sensitivty;
         }
         panel.mouseInput = false;
         panel.repaint();
@@ -99,6 +87,14 @@ public class KeyHandler implements KeyListener {
 
     public double getAngleY() {
         return angleY;
+    }
+
+    public void setAngleX(double newAngle) {
+        angleX = newAngle;
+    }
+
+    public void setAngleY(double newAngle) {
+        angleY = newAngle;
     }
 
 }
