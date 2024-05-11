@@ -14,12 +14,17 @@ public class Panel extends JPanel {
 
     List<Triangle> tris;
     MouseHandler mouseH;
+    KeyHandler keyH;
 
+    public boolean mouseInput = true;
 
     public Panel() {
         setBackground(Color.BLACK);
         mouseH = new MouseHandler(this);
         addMouseMotionListener(mouseH);
+        keyH = new KeyHandler(this);
+        addKeyListener(keyH);
+        setFocusable(true);
 
         tris = new ArrayList<>();
         tris.add(new Triangle(  new Vertex(100, 100, 100),
@@ -46,13 +51,23 @@ public class Panel extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        double heading = mouseH.getAngleX();
+        double heading, pitch;
+
+        if(mouseInput) {
+            heading = mouseH.getAngleX();
+            pitch = mouseH.getAngleY();
+            System.out.println( heading + " " + pitch);
+        } else {
+            heading = keyH.getAngleX();
+            pitch = keyH.getAngleY();
+        }
+
         Matrix3 headingTransform = new Matrix3(new double[] {
                 Math.cos(heading), 0, Math.sin(heading),
                 0, 1, 0,
                 -Math.sin(heading), 0, Math.cos(heading)
         });
-        double pitch = mouseH.getAngleY();
+
         Matrix3 pitchTransform = new Matrix3(new double[] {
                 1, 0, 0,
                 0, Math.cos(pitch), Math.sin(pitch),

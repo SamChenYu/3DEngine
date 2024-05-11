@@ -33,8 +33,9 @@ public class MouseHandler implements MouseMotionListener {
         // Sensitivity factor
         double sensitivity = 0.01;
 
-        angleX += deltaX * sensitivity;
-        angleY += deltaY * sensitivity;
+        angleX += deltaX * sensitivity * -1.0;
+        angleY += deltaY * sensitivity * -1.0;
+        panel.mouseInput = true;
         panel.repaint();
     }
 
