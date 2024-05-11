@@ -3,10 +3,11 @@ package gui;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 
-public class KeyHandler implements KeyListener, Runnable {
+public class KeyHandler implements KeyListener {
 
     private final Panel panel;
     public double angleX, angleY;
+    private final double sensitivty = 0.1;
 
     private volatile boolean leftPressed = false;
     private volatile boolean rightPressed = false;
@@ -14,8 +15,11 @@ public class KeyHandler implements KeyListener, Runnable {
     private volatile boolean downPressed = false;
 
 
+
     public KeyHandler(Panel panel) {
         this.panel = panel;
+        angleX = 0.0;
+        angleY = 0.0;
     }
 
     @Override
@@ -29,12 +33,16 @@ public class KeyHandler implements KeyListener, Runnable {
         switch (keyCode) {
             case KeyEvent.VK_LEFT:
                 leftPressed = true;
+                break;
             case KeyEvent.VK_RIGHT:
                 rightPressed = true;
+                break;
             case KeyEvent.VK_UP:
                 upPressed = true;
+                break;
             case KeyEvent.VK_DOWN:
                 downPressed = true;
+                break;
         }
         update();
     }
@@ -45,33 +53,41 @@ public class KeyHandler implements KeyListener, Runnable {
         switch (keyCode) {
             case KeyEvent.VK_LEFT:
                 leftPressed = false;
-                break;
             case KeyEvent.VK_RIGHT:
                 rightPressed = false;
-                break;
             case KeyEvent.VK_UP:
                 upPressed = false;
-                break;
             case KeyEvent.VK_DOWN:
                 downPressed = false;
-                break;
         }
-        update();
+
     }
 
     public void update() {
+
+
         if (leftPressed) {
-            angleX = -0.1;
-        } else
-        if (rightPressed) {
-            angleX = 0.1;
+            if(angleX > 0) {
+                angleX *= 1.0;
+            }
+            angleX += sensitivty;
+        } else if (rightPressed) {
+            if(angleX < 0) {
+                angleX *= 1.0;
+            }
+            angleX += sensitivty;
         }
 
         if (upPressed) {
-            angleY = -0.1;
-        } else
-        if (downPressed) {
-            angleY = 0.1;
+            if(angleY > 0) {
+                angleY *= 1.0;
+            }
+            angleY += sensitivty;
+        } else if (downPressed) {
+            if(angleY < 0) {
+                angleY *= 1.0;
+            }
+            angleY += sensitivty;
         }
         panel.mouseInput = false;
         panel.repaint();
@@ -85,15 +101,4 @@ public class KeyHandler implements KeyListener, Runnable {
         return angleY;
     }
 
-    @Override
-    public void run() {
-        while (true) {
-            update();
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 }

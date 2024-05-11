@@ -56,7 +56,6 @@ public class Panel extends JPanel {
         if(mouseInput) {
             heading = mouseH.getAngleX();
             pitch = mouseH.getAngleY();
-            System.out.println( heading + " " + pitch);
         } else {
             heading = keyH.getAngleX();
             pitch = keyH.getAngleY();
