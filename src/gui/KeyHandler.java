@@ -48,10 +48,10 @@ public class KeyHandler implements KeyListener {
                 downPressed = true;
                 break;
             case KeyEvent.VK_Q:
-                rollLeftPressed = true;
+                rollRightPressed = true;
                 break;
             case KeyEvent.VK_E:
-                rollRightPressed = true;
+                rollLeftPressed = true;
                 break;
             case KeyEvent.VK_LEFT:
                 leftPressed = true;
@@ -82,9 +82,9 @@ public class KeyHandler implements KeyListener {
             case KeyEvent.VK_S:
                 downPressed = false;
             case KeyEvent.VK_Q:
-                rollLeftPressed = false;
-            case KeyEvent.VK_E:
                 rollRightPressed = false;
+            case KeyEvent.VK_E:
+                rollLeftPressed = false;
             case KeyEvent.VK_LEFT:
                 leftPressed = false;
             case KeyEvent.VK_RIGHT:

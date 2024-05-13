@@ -8,8 +8,5 @@ public class Main {
         Panel panel = new Panel();
         frame.add(panel);
         frame.setVisible(true);
-
-
-
     }
 }

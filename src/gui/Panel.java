@@ -18,6 +18,8 @@ public class Panel extends JPanel {
 
     public boolean mouseInput = true;
 
+    JButton pyramid, tetrahedron, tetrahedron_plane, cube, inflate;
+
     public Panel() {
         setBackground(Color.BLACK);
         mouseH = new MouseHandler(this);
@@ -27,13 +29,56 @@ public class Panel extends JPanel {
         addKeyListener(keyH);
         setFocusable(true);
 
+        pyramid = new JButton("Pyramid");
+        pyramid.setBackground(Color.BLACK);
+        pyramid.setForeground(Color.WHITE);
+        pyramid.addActionListener(e -> {
+            createPyramid();
+            repaint();
+        });
+        add(pyramid);
+        tetrahedron = new JButton("Tetrahedron");
+        tetrahedron.setBackground(Color.BLACK);
+        tetrahedron.setForeground(Color.WHITE);
+        tetrahedron.addActionListener(e -> {
+            createTetrahedron();
+            repaint();
+        });
+        add(tetrahedron);
+        tetrahedron_plane = new JButton("Tetrahedron with Plane");
+        tetrahedron_plane.setBackground(Color.BLACK);
+        tetrahedron_plane.setForeground(Color.WHITE);
+        tetrahedron_plane.addActionListener(e -> {
+            createTetrahedronWithOriginPlane();
+            repaint();
+        });
+        add(tetrahedron_plane);
+        cube = new JButton("Cube");
+        cube.setBackground(Color.BLACK);
+        cube.setForeground(Color.WHITE);
+        cube.addActionListener(e -> {
+            createCube();
+            repaint();
+        });
+        add(cube);
+        inflate = new JButton("Inflate");
+        inflate.setBackground(Color.BLACK);
+        inflate.setForeground(Color.WHITE);
+        inflate.addActionListener(e -> {
+            shape = inflate(shape);
+            repaint();
+        });
+        add(inflate);
+        pyramid.setFocusable(false);
+        tetrahedron.setFocusable(false);
+        tetrahedron_plane.setFocusable(false);
+        cube.setFocusable(false);
+        inflate.setFocusable(false);
+
+
         createTetrahedron();
 
 
-
-        for(int i=0; i<2; i++) {
-            shape = inflate(shape);
-        }
     }
 
 
@@ -79,7 +124,6 @@ public class Panel extends JPanel {
                 Color.MAGENTA
         ));
     }
-
 
     public void createCube() {
         shape = new ArrayList<>();
