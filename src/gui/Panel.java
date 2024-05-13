@@ -22,11 +22,12 @@ public class Panel extends JPanel {
         setBackground(Color.BLACK);
         mouseH = new MouseHandler(this);
         addMouseMotionListener(mouseH);
+        addMouseWheelListener(mouseH);
         keyH = new KeyHandler(this);
         addKeyListener(keyH);
         setFocusable(true);
 
-        createPyramid();
+        createTetrahedron();
 
 
 
@@ -205,7 +206,7 @@ public class Panel extends JPanel {
         shape.add(new Triangle(v3, v4, v2, Color.BLUE));
 
         // Add plane triangles (centered at the origin)
-        double planeSize = 800; // Adjust the size of the plane as needed
+        double planeSize = 400; // Adjust the size of the plane as needed
         double halfPlaneSize = planeSize / 2;
         Vertex planeV1 = new Vertex(-halfPlaneSize, -halfPlaneSize, -200);
         Vertex planeV2 = new Vertex(halfPlaneSize, -halfPlaneSize, -200);
@@ -224,33 +225,62 @@ public class Panel extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        double heading, pitch;
-
+        double heading, pitch, roll;
         if(mouseInput) {
             heading = mouseH.getAngleX();
             pitch = mouseH.getAngleY();
-
+            roll = mouseH.getAngleZ();
             keyH.setAngleX(heading);
             keyH.setAngleY(pitch);
+            keyH.setAngleZ(roll);
         } else {
             heading = keyH.getAngleX();
             pitch = keyH.getAngleY();
+            roll = keyH.getAngleZ();
             mouseH.setAngleX(heading);
             mouseH.setAngleY(pitch);
+            mouseH.setAngleZ(roll);
         }
 
+        /* XZ Rotation Matrix <Left and Right>
+        |   cos(θ) 0   -sin(θ)  |
+        |   0      1   0        |
+        |   sin(θ) 0   cos(θ)   |
+         */
         Matrix3 headingTransform = new Matrix3(new double[] {
-                Math.cos(heading), 0, Math.sin(heading),
+                Math.cos(heading), 0, -Math.sin(heading),
                 0, 1, 0,
-                -Math.sin(heading), 0, Math.cos(heading)
+                Math.sin(heading), 0, Math.cos(heading)
         });
 
+        /* YZ Rotation Matrix <Up and Down>
+        |   1       0           0       |
+        |   0       cos(θ)      sin(θ)  |
+        |   0       -sin(θ)     cos(θ)  |
+         */
         Matrix3 pitchTransform = new Matrix3(new double[] {
                 1, 0, 0,
                 0, Math.cos(pitch), Math.sin(pitch),
                 0, -Math.sin(pitch), Math.cos(pitch)
         });
+
+        /* XY Rotation Matrix <Roll>
+        |   cos(θ)  -sin(θ)     0       |
+        |   sin(θ)  cos(θ)      0       |
+        |   0       0           1       |
+         */
+        Matrix3 rollTransform = new Matrix3(new double[]  {
+                Math.cos(roll), -Math.sin(roll), 0,
+                Math.sin(roll), Math.cos(roll), 0,
+                0, 0, 1
+        });
+
+
+
         Matrix3 transform = headingTransform.multiply(pitchTransform);
+        transform = transform.multiply(rollTransform);
+
+
 
         BufferedImage img =
                 new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
