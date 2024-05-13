@@ -26,12 +26,11 @@ public class Panel extends JPanel {
         addKeyListener(keyH);
         setFocusable(true);
 
-        createTetrahedron();
+        createPyramid();
 
 
 
-
-        for(int i=0; i<1; i++) {
+        for(int i=0; i<2; i++) {
             shape = inflate(shape);
         }
     }
@@ -189,6 +188,36 @@ public class Panel extends JPanel {
                 new Vertex(-200, -200, 200),
                 Color.BLUE));
     }
+
+    public void createTetrahedronWithOriginPlane() {
+        shape = new ArrayList<>();
+
+        // Add tetrahedron vertices
+        Vertex v1 = new Vertex(200, 200, 200);
+        Vertex v2 = new Vertex(-200, -200, 200);
+        Vertex v3 = new Vertex(-200, 200, -200);
+        Vertex v4 = new Vertex(200, -200, -200);
+
+        // Add tetrahedron triangles
+        shape.add(new Triangle(v1, v2, v3, Color.YELLOW));
+        shape.add(new Triangle(v1, v2, v4, Color.RED));
+        shape.add(new Triangle(v3, v4, v1, Color.GREEN));
+        shape.add(new Triangle(v3, v4, v2, Color.BLUE));
+
+        // Add plane triangles (centered at the origin)
+        double planeSize = 800; // Adjust the size of the plane as needed
+        double halfPlaneSize = planeSize / 2;
+        Vertex planeV1 = new Vertex(-halfPlaneSize, -halfPlaneSize, -200);
+        Vertex planeV2 = new Vertex(halfPlaneSize, -halfPlaneSize, -200);
+        Vertex planeV3 = new Vertex(halfPlaneSize, halfPlaneSize, -200);
+        Vertex planeV4 = new Vertex(-halfPlaneSize, halfPlaneSize, -200);
+
+        // Define two triangles to form the plane
+        shape.add(new Triangle(planeV1, planeV2, planeV3, Color.WHITE));
+        shape.add(new Triangle(planeV1, planeV3, planeV4, Color.WHITE));
+    }
+
+
 
     @Override
     public void paintComponent(Graphics g) {
