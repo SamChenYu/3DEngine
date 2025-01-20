@@ -2,9 +2,10 @@ package gui;
 
 import javax.swing.*;
 public class Frame extends JFrame {
-    public Frame() {
+
+    public Frame(int WIDTH, int HEIGHT) {
         setTitle("RenderEngine");
-        setSize(800, 800);
+        setSize(WIDTH, HEIGHT);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
