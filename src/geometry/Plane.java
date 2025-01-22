@@ -5,12 +5,10 @@ import math.Normal;
 import math.Point3D;
 import math.Ray;
 
-public class Plane {
+public class Plane extends GeometricObject {
 
     Point3D point;
     Normal normal;
-    Color color;
-
 
 
     public Plane(Point3D point, Normal normal, Color color) {

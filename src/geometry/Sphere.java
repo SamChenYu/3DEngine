@@ -8,9 +8,9 @@ public class Sphere extends GeometricObject {
 
     public Point3D center;
     public double radius;
-    public Color color;
 
     public Sphere(Point3D center, double radius, Color color) {
+        super();
         this.center = new Point3D(center);
         this.radius = radius;
         this.color = color;
