@@ -1,8 +1,6 @@
 package gui;
 
-import math.*;
-import geometry.*;
-import math.Color;
+import scene.PerspectiveProjection;
 import scene.Tracer;
 import scene.World;
 
@@ -29,6 +27,7 @@ public class Panel extends JPanel {
 
     public Panel(int width, int height, World world) {
         tracer = new Tracer(width, height, world);
+
         this.world = world;
         WIDTH = width;
         HEIGHT = height;

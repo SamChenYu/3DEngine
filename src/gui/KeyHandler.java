@@ -6,8 +6,7 @@ import java.awt.event.KeyEvent;
 public class KeyHandler implements KeyListener {
 
     private final Panel panel;
-    public double angleX, angleY, angleZ;
-    private final double sensitivty = 0.1;
+    private final double sensitivty = 300;
 
     private volatile boolean leftPressed = false;
     private volatile boolean rightPressed = false;
@@ -20,9 +19,6 @@ public class KeyHandler implements KeyListener {
 
     public KeyHandler(Panel panel) {
         this.panel = panel;
-        angleX = 0.0;
-        angleY = 0.0;
-        angleZ = 0.0;
     }
 
     @Override
@@ -101,47 +97,28 @@ public class KeyHandler implements KeyListener {
 
 
         if (leftPressed) {
-            angleX -= sensitivty;
+            panel.tracer.perspectiveProjection.eye.x += sensitivty;
         } else if (rightPressed) {
-            angleX += sensitivty;
+            panel.tracer.perspectiveProjection.eye.x -= sensitivty;
         }
 
         if (upPressed) {
-            angleY += sensitivty;
+            panel.tracer.perspectiveProjection.eye.z += sensitivty;
         } else if (downPressed) {
-            angleY -= sensitivty;
+            panel.tracer.perspectiveProjection.eye.z -= sensitivty;
         }
 
         if(rollLeftPressed) {
-            angleZ -= sensitivty;
+            panel.tracer.perspectiveProjection.eye.y += sensitivty;
         } else if(rollRightPressed) {
-            angleZ += sensitivty;
+            panel.tracer.perspectiveProjection.eye.y -= sensitivty;
         }
 
         panel.mouseInput = false;
         panel.repaint();
     }
 
-    public double getAngleX() {
-        return angleX;
-    }
 
-    public double getAngleY() {
-        return angleY;
-    }
 
-    public double getAngleZ() { return angleZ; }
-
-    public void setAngleX(double newAngle) {
-        angleX = newAngle;
-    }
-
-    public void setAngleY(double newAngle) {
-        angleY = newAngle;
-    }
-
-    public void setAngleZ(double newAngle) {
-        angleZ = newAngle;
-    }
 
 }

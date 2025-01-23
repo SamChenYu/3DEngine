@@ -18,11 +18,11 @@ public class World {
 
     public World(int width, int height, double size) {
         viewPlane = new ViewPlane(width, height, size);
-        background = new Color(0.0F, 0.0F, 1.0F);
+        background = new Color(0.7F, 0.3F, 0.8F);
         objects = new ArrayList<>();
         objects.add(new Sphere(new Point3D(0.0, 0.0, 0.0), 60.0, new math.Color(1.0F, 0.0F, 0.0F)));
-        objects.add(new Sphere(new Point3D(200.0, 0.0, 0.0), 30.0, new math.Color(0.0F, 1.0F, 0.0F)));
-        objects.add(new Sphere(new Point3D(-200.0, 0.0, 0.0), 15.0, new math.Color(0.0F, 0.0F, 1.0F)));
+        objects.add(new Sphere(new Point3D(200.0, 0.0, 0.0), 80.0, new math.Color(0.0F, 1.0F, 0.0F)));
+        objects.add(new Sphere(new Point3D(-200.0, 0.0, 0.0), 45.0, new math.Color(0.0F, 0.0F, 1.0F)));
 
         objects.add(new Plane(new Point3D(0.0, 0.0, 0.0), new Normal(0.0, 1.0, 0.2), new math.Color(1.0F, 0.0F, 1.0F)));
     }

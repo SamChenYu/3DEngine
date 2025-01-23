@@ -52,5 +52,16 @@ public class Vector3D {
         z /= length;
     }
 
+    public Vector3D cross(Vector3D vector) {
+        return new Vector3D(
+                y*vector.z-z*vector.y,
+                z*vector.x-x*vector.z,
+                x*vector.y-y*vector.x
+        );
+    }
+
+    public Vector3D mult(double scalar) {
+        return new Vector3D(x*scalar, y*scalar, z*scalar);
+    }
 
 }

@@ -1,5 +1,6 @@
 package scene;
 
+import math.Point2D;
 import math.Point3D;
 import math.Ray;
 import math.Vector3D;
@@ -14,10 +15,8 @@ public class Tracer {
     public final Random random;
 
     public final World world;
+    public PerspectiveProjection perspectiveProjection;
 
-
-    private final int renderX;
-    private final int renderY;
     private final int renderZ;
     private final int samples = 8; // for anti-aliasing
 
@@ -26,9 +25,15 @@ public class Tracer {
         HEIGHT = height;
         random = new Random();
         this.world = world;
+        perspectiveProjection = new PerspectiveProjection(
+                new Point3D(0.0, 0.0, 600.0),
+                new Point3D(-100.0, 100.0, 0.0),
+                100.0,
+                WIDTH,
+                HEIGHT
+        );
 
-        renderX = (int) (0.4*(WIDTH/2+.5));
-        renderY = (int) (0.4*(HEIGHT/2+.5));
+
         renderZ = 100;
     }
 
@@ -46,10 +51,14 @@ public class Tracer {
                 int pointY = (int) (y - HEIGHT / 2 + (row + 0.5) / samples);
 
                 //orthographic projection
+                /*
                 Ray ray = new Ray(
                         new Point3D(world.viewPlane.size * pointX, world.viewPlane.size * pointY, renderZ),
                         new Vector3D(0.0, 0.0, -1.0)
                 );
+                */
+                // Perspective projection
+                Ray ray = perspectiveProjection.createRay(new Point2D(world.viewPlane.size * pointX, world.viewPlane.size * pointY));
 
                 double min = Double.MAX_VALUE; // kind of like a z buffer
                 math.Color tempColor = world.background;
