@@ -1,19 +1,16 @@
-# 3DEngine
+Rasterization Pipeline: Tests each triangle against pixels by computing a bounding box
+- Apply transformation matrix
+- Intialise z buffer
+- Rasterize each triangle in each shape
+	- compute normal for shading
+	- compute rectangular bounds [ identifies 2d screen space are affected by 3d object ]
+	- loop through every pixel in bounding box
+	- check if pixel is inside the triangle
+	- compute z depth
+- set color of pixel if z buffer is smallest
 
-Basic 3D engine with rasterization, z buffering and flat shading.
+Ray Tracing Pipeline: Shoots a ray from camera through each pixel using mathematical equations
+- Generate a ray from camera passing through lookAt
+- Loop through all objects and find closest intersection
+- Anti aliasing to sample out colours
 
-Controls: 
-Mouse / Arrow Keys  
-A / D : Heading  
-W / S : Pitch  
-Q / E : Roll  
-
-https://github.com/SamChenYu/3DEngine/assets/150127006/ddaf8756-b25f-49b0-b1b7-cbc7f8e86dea
-
-
-
-https://github.com/SamChenYu/3DEngine/assets/150127006/f9288da4-0d7b-4118-ab8d-fdb2e478dcf5
-
-
-
-http://blog.rogach.org/2015/08/how-to-create-your-own-simple-3d-render.html 
