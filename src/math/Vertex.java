@@ -1,4 +1,4 @@
-package render;
+package math;
 
 public class Vertex {
     public double x;

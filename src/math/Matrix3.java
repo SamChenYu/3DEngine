@@ -1,4 +1,4 @@
-package render;
+package math;
 public class Matrix3 {
     public double[] values;
     public Matrix3(double[] values) {

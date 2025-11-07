@@ -1,4 +1,4 @@
-package render;
+package math;
 
 import java.awt.*;
 public class Triangle {
