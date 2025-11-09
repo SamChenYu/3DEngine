@@ -11,6 +11,7 @@ import java.awt.geom.Path2D;
 
 import java.util.List;
 import java.util.ArrayList;
+
 public class Panel extends JPanel {
 
     List<Triangle> shape;
@@ -75,21 +76,17 @@ public class Panel extends JPanel {
         cube.setFocusable(false);
         inflate.setFocusable(false);
 
-
         shape = RenderUtils.createTetrahedron();
-    }
 
+    }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-
-
-
         double heading, pitch, roll;
-        if(mouseInput) {
+        if (mouseInput) {
             heading = mouseH.getAngleX();
             pitch = mouseH.getAngleY();
             roll = mouseH.getAngleZ();
@@ -105,10 +102,11 @@ public class Panel extends JPanel {
             mouseH.setAngleZ(roll);
         }
 
-        /* XZ Rotation Matrix <Left and Right>
-        |   cos(θ) 0   -sin(θ)  |
-        |   0      1   0        |
-        |   sin(θ) 0   cos(θ)   |
+        /*
+         * XZ Rotation Matrix <Left and Right>
+         * | cos(θ) 0 -sin(θ) |
+         * | 0 1 0 |
+         * | sin(θ) 0 cos(θ) |
          */
         Matrix3 headingTransform = new Matrix3(new double[] {
                 Math.cos(heading), 0, -Math.sin(heading),
@@ -116,10 +114,11 @@ public class Panel extends JPanel {
                 Math.sin(heading), 0, Math.cos(heading)
         });
 
-        /* YZ Rotation Matrix <Up and Down>
-        |   1       0           0       |
-        |   0       cos(θ)      sin(θ)  |
-        |   0       -sin(θ)     cos(θ)  |
+        /*
+         * YZ Rotation Matrix <Up and Down>
+         * | 1 0 0 |
+         * | 0 cos(θ) sin(θ) |
+         * | 0 -sin(θ) cos(θ) |
          */
         Matrix3 pitchTransform = new Matrix3(new double[] {
                 1, 0, 0,
@@ -127,27 +126,22 @@ public class Panel extends JPanel {
                 0, -Math.sin(pitch), Math.cos(pitch)
         });
 
-        /* XY Rotation Matrix <Roll>
-        |   cos(θ)  -sin(θ)     0       |
-        |   sin(θ)  cos(θ)      0       |
-        |   0       0           1       |
+        /*
+         * XY Rotation Matrix <Roll>
+         * | cos(θ) -sin(θ) 0 |
+         * | sin(θ) cos(θ) 0 |
+         * | 0 0 1 |
          */
-        Matrix3 rollTransform = new Matrix3(new double[]  {
+        Matrix3 rollTransform = new Matrix3(new double[] {
                 Math.cos(roll), -Math.sin(roll), 0,
                 Math.sin(roll), Math.cos(roll), 0,
                 0, 0, 1
         });
 
-
-
         Matrix3 transform = headingTransform.multiply(pitchTransform);
         transform = transform.multiply(rollTransform);
 
         BufferedImage img = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
-        
-
-
-
 
         // Rendering Loop
         // Z - buffering
@@ -158,12 +152,11 @@ public class Panel extends JPanel {
         }
 
         for (Triangle t : shape) {
-            // rasterize triangle
+            // rasterize triangle - 3D vertex -> 2D screen space
             Vertex v1 = transform.transform(t.v1);
             Vertex v2 = transform.transform(t.v2);
             Vertex v3 = transform.transform(t.v3);
-
-            // since we are not using Graphics2D anymore   ,
+            // since we are not using Graphics2D anymore ,
             // we have to do translation manually
             v1.x += getWidth() / 2;
             v1.y += getHeight() / 2;
@@ -178,17 +171,13 @@ public class Panel extends JPanel {
             Vertex norm = new Vertex(
                     ab.y * ac.z - ab.z * ac.y,
                     ab.z * ac.x - ab.x * ac.z,
-                    ab.x * ac.y - ab.y * ac.x
-            );
-            double normalLength =
-                    Math.sqrt(norm.x * norm.x + norm.y * norm.y + norm.z * norm.z);
+                    ab.x * ac.y - ab.y * ac.x);
+            double normalLength = Math.sqrt(norm.x * norm.x + norm.y * norm.y + norm.z * norm.z);
             norm.x /= normalLength;
             norm.y /= normalLength;
             norm.z /= normalLength;
 
             double angleCos = Math.abs(norm.z);
-
-
 
             // compute rectangular bounds for triangle
             int minX = (int) Math.max(0, Math.ceil(Math.min(v1.x, Math.min(v2.x, v3.x))));
@@ -198,23 +187,21 @@ public class Panel extends JPanel {
             int maxY = (int) Math.min(img.getHeight() - 1,
                     Math.floor(Math.max(v1.y, Math.max(v2.y, v3.y))));
 
-            double triangleArea =
-                    (v1.y - v3.y) * (v2.x - v3.x) + (v2.y - v3.y) * (v3.x - v1.x);
+            double triangleArea = (v1.y - v3.y) * (v2.x - v3.x) + (v2.y - v3.y) * (v3.x - v1.x);
 
             for (int y = minY; y <= maxY; y++) {
                 for (int x = minX; x <= maxX; x++) {
-                    double b1 =
-                            ((y - v3.y) * (v2.x - v3.x) + (v2.y - v3.y) * (v3.x - x)) / triangleArea;
-                    double b2 =
-                            ((y - v1.y) * (v3.x - v1.x) + (v3.y - v1.y) * (v1.x - x)) / triangleArea;
-                    double b3 =
-                            ((y - v2.y) * (v1.x - v2.x) + (v1.y - v2.y) * (v2.x - x)) / triangleArea;
+                    // barycentric coordinates (if pixel lies inside triangle)
+                    double b1 = ((y - v3.y) * (v2.x - v3.x) + (v2.y - v3.y) * (v3.x - x)) / triangleArea;
+                    double b2 = ((y - v1.y) * (v3.x - v1.x) + (v3.y - v1.y) * (v1.x - x)) / triangleArea;
+                    double b3 = ((y - v2.y) * (v1.x - v2.x) + (v1.y - v2.y) * (v2.x - x)) / triangleArea;
                     if (b1 >= 0 && b1 <= 1 && b2 >= 0 && b2 <= 1 && b3 >= 0 && b3 <= 1) {
                         // z buffering
                         double depth = b1 * v1.z + b2 * v2.z + b3 * v3.z;
                         int zIndex = y * img.getWidth() + x;
                         if (zBuffer[zIndex] < depth) {
-                            img.setRGB(x, y, getShade(t.color, angleCos).getRGB());
+                            img.setRGB(x, y, getShade(t.color, angleCos).getRGB()); // Add the normal computations
+                                                                                    // here!!!
                             zBuffer[zIndex] = depth;
                         }
                     }
@@ -226,25 +213,15 @@ public class Panel extends JPanel {
         g2.drawImage(img, 0, 0, null);
     }
 
-    
-
-
-
-    
+    private static final double ambientStrength = 0.3;
+    private static final Vertex lightPos = new Vertex(0, 0, 1);
 
     public static Color getShade(Color color, double shade) {
-        double redLinear = Math.pow(color.getRed(), 2.4) * shade;
-        double greenLinear = Math.pow(color.getGreen(), 2.4) * shade;
-        double blueLinear = Math.pow(color.getBlue(), 2.4) * shade;
-
-        int red = (int) Math.pow(redLinear, 1/2.4);
-        int green = (int) Math.pow(greenLinear, 1/2.4);
-        int blue = (int) Math.pow(blueLinear, 1/2.4);
+        int red = (int) (color.getRed() * ambientStrength);
+        int green = (int) (color.getGreen() * ambientStrength);
+        int blue = (int) (color.getBlue() * ambientStrength);
 
         return new Color(red, green, blue);
     }
-
-
-
 
 }

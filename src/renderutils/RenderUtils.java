@@ -8,6 +8,9 @@ import java.awt.*;
 
 public class RenderUtils {
 
+
+
+
     public static ArrayList<Triangle> createPyramid() {
         ArrayList<Triangle> shape = new ArrayList<>();
         // Base of the pyramid
